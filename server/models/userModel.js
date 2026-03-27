@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const userSchema = new mongoose.Schema({
     name:String,
@@ -16,7 +17,7 @@ const userSchema = new mongoose.Schema({
     verificationCode: Number,
     verificationCodeExpire: Date,
     resetPasswordToken: String,
-    resetPasswordExpired: Date,
+    resetPasswordExpire: Date,
     createdAt: {
         type:Date,
         default: Date.now
@@ -49,9 +50,17 @@ userSchema.methods.generateVerificationCode = function(){
     return otp; 
 }
 
-userSchema.methods.generateToken = async function(){
-  const token = await jwt.sign({id: this._id}, process.env.JWT_SECRET_KEY,{expiresIn:process.env.JWT_EXPIRE_TIME});
+userSchema.methods.generateToken = function(){
+  const token =  jwt.sign({_id: this._id}, process.env.JWT_SECRET_KEY,{expiresIn:process.env.JWT_EXPIRE_TIME});
   return token;
+}
+
+
+userSchema.methods.generateResetPasswordToken = function(){
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.resetPasswordExpire = Date.now() + 15 * 60 *1000;
+    return resetToken;     
 }
 
 
