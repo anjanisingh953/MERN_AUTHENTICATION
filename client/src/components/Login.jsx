@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
- const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(Context)
+ const {  setIsAuthenticated, setUser } = useContext(Context)
  const navigateTo = useNavigate();
  const {register, handleSubmit, formState: {errors} } =  useForm();
 
