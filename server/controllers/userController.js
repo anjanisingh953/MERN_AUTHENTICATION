@@ -160,3 +160,41 @@ export const verifyOTP = catchAsyncError(async (req, res, next) => {
 
 
 })
+
+
+export const login = catchAsyncError(async(req,res,next)=>{
+    const {email, password} =  req.body;
+    
+    if(!email || !password){
+      return next(new ErrorHandler('Email and password are required', 400));
+    }
+
+    const user = await User.findOne({email, accountVerified:true}).select('+password');
+
+    if(!user){
+        return next(new ErrorHandler('Invalid email or password', 400));
+    }
+    
+    const isPasswordMatched = await user.comparePassword(password);
+    
+    if(!isPasswordMatched){
+        return next(new ErrorHandler('Invalid email or password', 400));
+    }
+
+    sendToken(user, 200, 'user loggedin successfully', res);
+
+
+})
+
+
+export const logout = catchAsyncError(async(req,res,next)=>{
+
+    res.status(200).cookie('token','',{
+        expires:new Date(Date.now()),
+        httpOnly:true
+    })
+    .json({
+        success:true,
+        message:'Logged out successfully.'
+    })
+})
