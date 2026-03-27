@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
     name:String,
@@ -46,5 +47,11 @@ userSchema.methods.generateVerificationCode = function(){
     this.verificationCodeExpire = Date.now() + 5 * 60 * 1000;
     return otp; 
 }
+
+userSchema.methods.generateToken = async function(){
+  const token = await jwt.sign({id: this._id}, process.env.JWT_SECRET_KEY,{expiresIn:process.env.JWT_EXPIRE_TIME});
+  return token;
+}
+
 
 export const User = mongoose.model('User',userSchema) 
