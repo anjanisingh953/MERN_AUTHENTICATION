@@ -66,7 +66,7 @@ const OtpVerification = () => {
           <p>Enter the 6 digit OTP sent to your registered email.</p>
 
           <form onSubmit={handleOtpVerfication} className="otp-form">
-            <div className="opt-input-container">
+            <div className="otp-input-container">
               {
                 otp.map((digit,index)=>{
                   return(
