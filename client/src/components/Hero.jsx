@@ -12,8 +12,9 @@ const Hero = () => {
         <h4>Hello, {user ? user.name : "Developer"}</h4>
         <h1>Welcome to MERN Auth Tutorial</h1>
         <p>
-          In this tutorial you are going to learn complete authentication using
-          MERN stack while learning OTP verification with Twilio and Nodemailer.
+          In this project, I have developed complete authentication using
+          MERN stack while using OTP verification with Twilio and Nodemailer.
+          
         </p>
       </div>
     </>
